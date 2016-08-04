@@ -1,0 +1,37 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:camel="http://camel.apache.org/schema/spring" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean id="playerSort" class="com.backbase.training.processor.PlayerSortProcessor"/>
+
+    <camel:routeContext id="com.backbase.portal.integration.service.exercise02"
+        xmlns="http://camel.apache.org/schema/spring">
+        <route id="com.backbase.training.exercise02" streamCache="true">
+            <from uri="restlet:/player/list?restletMethods=GET&amp;restletBinding=#queryStringToHeadersRestletBinding" />
+
+            <removeHeaders pattern="CamelHttp*" excludePattern="CamelHttpMethod"/>
+            <to uri="http://localhost:9999/training-server/rest/player/players" />
+
+            <unmarshal>
+                <json library="Jackson" />
+            </unmarshal>
+
+            <doTry>
+                <process ref="playerSort"/>
+                <doCatch>
+                    <exception>java.lang.IllegalArgumentException</exception>
+                    <log message="unable to sort list - using the original one" loggingLevel="ERROR"/>
+                </doCatch>
+            </doTry>
+
+            <marshal>
+                <json library="Jackson"/>
+            </marshal>
+
+            <log message="body: ${body}"/>
+
+        </route>
+    </camel:routeContext>
+</beans>

@@ -1,10 +1,14 @@
 package com.backbase.training.processor;
 
+import com.backbase.training.to.Player;
+import com.backbase.training.to.Players;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -17,31 +21,16 @@ public class PlayerSortProcessor implements Processor{
     @Override
     public void process(Exchange exchange) throws Exception {
 
-        Map body = exchange.getIn().getBody(Map.class);
-        List players = (List) body.get("players");
+        Players body = exchange.getIn().getBody(Players.class);
+        List<Player> players = body.getPlayers();
         final String field = (String) exchange.getIn().getHeader("sort");
 
-        if(field != null) {
-
-            boolean coin = new Random().nextBoolean();
-            if(coin) {
-                throw new IllegalArgumentException(field + " is missing. Unable to sort the list of players");
-            }
-
-            Collections.sort(players, new Comparator() {
-                @Override
-                public int compare(Object o1, Object o2) {
-                    Map m1 = (Map) o1;
-                    Map m2 = (Map) o2;
-
-                    Object v1 = m1.get(field);
-                    Object v2 = m2.get(field);
-
-
-                    return v1.toString().compareTo(v2.toString());
-                }
+        if("username".equals(field)) {
+            Collections.sort(players, (Player p1, Player p2) -> {
+                return p1.getUsername().compareTo(p2.getUsername());
             });
         }
+
         logger.debug("Players: " + players);
     }
 }

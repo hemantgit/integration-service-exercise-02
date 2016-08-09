@@ -15,16 +15,11 @@
             <to uri="http://localhost:9999/training-server/rest/player/players" />
 
             <unmarshal>
-                <json library="Jackson" />
+                <json library="Jackson" unmarshalTypeName="com.backbase.training.to.Players"/>
             </unmarshal>
 
-            <doTry>
-                <process ref="playerSort"/>
-                <doCatch>
-                    <exception>java.lang.IllegalArgumentException</exception>
-                    <log message="unable to sort list - using the original one" loggingLevel="ERROR"/>
-                </doCatch>
-            </doTry>
+            <process ref="playerSort"/>
+
 
             <marshal>
                 <json library="Jackson"/>

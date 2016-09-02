@@ -9,9 +9,9 @@ You must have the Training Server up and running. Here you can find the github p
 
 ### Installation & Configuration
 
-- Copy **integration-service-exercise-02** into the **services** folder of your project. You can use the git command to clone the project: ```git clone https://github.com/marciofk/integration-service-exercise-01.git```
+- Copy **integration-service-exercise-02** into the **services** folder of your project. You can use the git command to clone the project: ```git clone https://github.com/marciofk/integration-service-exercise-02.git```
 
-- Include **integration-service-exercise-02** module to the build.  Open `services/pom.xml` and add **integration-service-exercise-01** in the `<modules>` section: 
+- Include **integration-service-exercise-02** module to the build.  Open `services/pom.xml` and add **integration-service-exercise-02** in the `<modules>` section: 
 	```xml
 	    <modules>
 	        ...	    
